@@ -70,6 +70,10 @@ set (heif_test_sources
   heif_test.cc
 )
 
+set (heif_scale_sources
+  heif_scale.cc
+)
+
 if(MSVC)
   set (heif_convert_sources
     ${heif_convert_sources}
@@ -110,6 +114,8 @@ target_link_libraries (heif-enc ${LIBHEIF_LIBRARY_NAME} ${additional_libraries})
 add_executable (heif-test ${heif_test_sources})
 target_link_libraries (heif-test ${LIBHEIF_LIBRARY_NAME})
 
+add_executable (heif-scale ${heif_scale_sources})
+target_link_libraries (heif-scale ${LIBHEIF_LIBRARY_NAME})
 
 if(LIBPNG_FOUND)
   set (heif_thumbnailer_sources

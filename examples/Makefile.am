@@ -3,7 +3,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 examples = \
   heif-convert \
   heif-enc \
-  heif-info
+  heif-info \
+  heif-scale
 
 examples_noinst = \
   heif-test \
@@ -64,6 +65,12 @@ heif_test_CXXFLAGS = -I$(top_srcdir) -I$(top_builddir)
 heif_test_LDFLAGS =
 heif_test_LDADD = ../libheif/libheif.la
 heif_test_SOURCES = heif_test.cc
+
+heif_scale_DEPENDENCIES = ../libheif/libheif.la
+heif_scale_CXXFLAGS = -I$(top_srcdir) -I$(top_builddir)
+heif_scale_LDFLAGS =
+heif_scale_LDADD = ../libheif/libheif.la
+heif_scale_SOURCES = heif_scale.cc
 
 test_c_api_DEPENDENCIES = ../libheif/libheif.la
 test_c_api_CFLAGS = -I$(top_srcdir) -I$(top_builddir)
