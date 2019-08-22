@@ -55,7 +55,7 @@
 #define UNUSED(x) (void)x
 
 static int usage(const char* command) {
-  fprintf(stderr, "USAGE: %s [-q quality] <filename> <output>\n", command);
+  fprintf(stderr, "USAGE: %s [-q quality] [-i index] <filename> <output>\n", command);
   return 1;
 }
 
@@ -73,12 +73,16 @@ class ContextReleaser {
 int main(int argc, char** argv)
 {
   int opt;
+  int index = 0;
   int quality = -1;  // Use default quality.
   UNUSED(quality);  // The quality will only be used by encoders that support it.
-  while ((opt = getopt(argc, argv, "q:")) != -1) {
+  while ((opt = getopt(argc, argv, "q:i:")) != -1) {
     switch (opt) {
     case 'q':
       quality = atoi(optarg);
+      break;
+    case 'i':
+      index = atoi(optarg);
       break;
     default: /* '?' */
       return usage(argv[0]);
@@ -180,18 +184,33 @@ int main(int argc, char** argv)
 
 
   std::string filename;
-  size_t image_index = 1;  // Image filenames are "1" based.
+  int image_index = 1;  // Image filenames are "1" based.
 
-  for (int idx = 0; idx < num_images; ++idx) {
+  if (index > num_images) {
+    index = 1;
+  }
 
-    if (num_images>1) {
-      std::ostringstream s;
-      s << output_filename.substr(0, output_filename.find_last_of('.'));
-      s << "-" << image_index;
-      s << output_filename.substr(output_filename.find_last_of('.'));
-      filename.assign(s.str());
-    } else {
+  int idx = 0;
+  do {
+    image_index = idx + 1;
+    if (index > 0) {
+      if (image_index < index) {
+        idx++;
+        continue;
+      } else if (image_index > index) {
+        break;
+      }
       filename.assign(output_filename);
+    } else {
+      if (num_images>1) {
+        std::ostringstream s;
+        s << output_filename.substr(0, output_filename.find_last_of('.'));
+        s << "-" << image_index;
+        s << output_filename.substr(output_filename.find_last_of('.'));
+        filename.assign(s.str());
+      } else {
+        filename.assign(output_filename);
+      }
     }
 
     struct heif_image_handle* handle;
@@ -281,8 +300,8 @@ int main(int argc, char** argv)
       heif_image_handle_release(handle);
     }
 
-    image_index++;
-  }
+    idx++;
+  } while (idx < num_images);
 
   return 0;
 }
