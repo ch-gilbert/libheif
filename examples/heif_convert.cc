@@ -148,12 +148,10 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (filetype_check == heif_filetype_yes_unsupported) {
+  /* if (filetype_check == heif_filetype_yes_unsupported) {
     fprintf(stderr, "Input file is an unsupported HEIF file type\n");
     return 1;
-  }
-
-
+  } */
 
   // --- read the HEIF file
 
