@@ -143,12 +143,12 @@ int main(int argc, char** argv)
   uint8_t magic[12];
   istr.read((char*)magic,12);
   enum heif_filetype_result filetype_check = heif_check_filetype(magic,12);
-  if (filetype_check == heif_filetype_no) {
+  /* if (filetype_check == heif_filetype_no) {
     fprintf(stderr, "Input file is not an HEIF file\n");
     return 1;
   }
 
-  /* if (filetype_check == heif_filetype_yes_unsupported) {
+  if (filetype_check == heif_filetype_yes_unsupported) {
     fprintf(stderr, "Input file is an unsupported HEIF file type\n");
     return 1;
   } */
